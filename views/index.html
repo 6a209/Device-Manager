@@ -1,0 +1,169 @@
+<% include header.html %>
+
+<style>
+    .content{
+        margin: 100px 200px;
+    }
+</style>
+<header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="../" class="navbar-brand">MIT-Device</a>
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="../getting-started">设备列表</a>
+        </li>
+        <li>
+           <a id="append" href="#">添加设备</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a href="../about">关于</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="content">
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>id</th> 
+            <th>设备名</th>
+            <th>系统版本</th>
+            <th>分辨率</th>
+            <th>在TM谁那！</th>
+            <th>借出时间</th>
+            <th>描述</th>
+            <th>编辑</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <% list.forEach(function(item){ %>
+        <tr >
+            <td id="id"><%= item.id %></td> 
+            <td id="name"><%= item.name %></td> 
+            <td id="version"><%= item.version %></td> 
+            <td id="resolution"><%= item.resolution %></td>
+            <td id="inwho"><%= item.inwho %></td> 
+            <td id="time"><%= item.time %></td>
+            <td id="desc"><%= item.desc %></td>
+            <input id="_id" type="hidden" value="<%=item._id%>" >
+            <td id="edit"> <div class=""> <button class="button edit">edit</button>  <button class="del button">del</button> </div></td>
+        </tr>
+        <% })%>
+    </tbody>
+</table>
+</div>
+
+<div class="modal fade" id="editModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">编辑</h4>
+         </div>
+        <div class="modal-body">
+        <form class="form-horizontal" role="form" action="#">
+
+            <input id="showId" type="hidden">
+            <input id="inputId" type="hidden">
+
+            <div class="form-group">
+                <label for="inputName" class="col-sm-2 control-label">设备名</label>
+                <div class="col-sm-10">  
+                    <input type="name" class="form-control" id="inputName" placeholder="name">
+                </div>
+            </div> 
+
+            <div class="form-group">
+                <label for="inputVersion" class="col-sm-2 control-label">系统版本</label>
+                <div class="col-sm-10">  
+                    <input type="version" class="form-control" id="inputVersion" placeholder="系统版本">
+                </div>
+            </div> 
+
+            <div class="form-group">
+                <label for="inputResolution" class="col-sm-2 control-label">分辨率</label>
+                <div class="col-sm-10">  
+                    <input type="resolution" class="form-control" id="inputResolution" placeholder="分辨率">
+                </div>
+            </div> 
+
+            <div class="form-group">
+                <label for="inputInWho" class="col-sm-2 control-label">在TM谁那</label>
+                <div class="col-sm-10">  
+                    <input type="inWho" class="form-control" id="inputInWho" placeholder="在哪">
+                </div>
+            </div> 
+
+            <div class="form-group">
+                <label for="inputTime" class="col-sm-2 control-label">借出时间</label>
+                <div class="col-sm-10">  
+                    <input  class="form-control" id="inputTime" placeholder="借出时间">
+                </div>
+            </div> 
+
+
+            <div class="form-group">
+                <label for="inputDesc" class="col-sm-2 control-label">描述</label>
+                <div class="col-sm-10">  
+                    <input type="desc" class="form-control" id="inputDesc" placeholder="描述">
+                </div>
+            </div> 
+        </form>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" id="ok_btn" class="btn btn-primary" >确定</button> 
+        </div>
+    </div>
+    </div>
+</div> 
+
+<% include footer.html %>
+
+<script>
+
+    var isEdit = "isEdit";
+    $(document).ready(function(){
+        // 编辑
+        $(".edit").click(function(){
+            var tdList = $(this).parent().parent().parent().children();
+            $("#showId").val(tdList.eq(0).text()); 
+            $("#inputName").val(tdList.eq(1).text()); 
+            $("#inputVersion").val(tdList.eq(2).text());
+            $("#inputResolution").val(tdList.eq(3).text());
+            $("#inputInWho").val(tdList.eq(4).text());
+            $("#inputTime").val(tdList.eq(5).text());
+            $("#inputDesc").val(tdList.eq(6).text());
+            var _id = tdList.eq(7).val();
+            $("#inputId").val(_id);
+            $("#editModal").modal('show');        
+        });
+
+        //添加
+        $("#append").click(function(){
+            // clear
+            $("#inputName").val(''); 
+            $("#inputVersion").val('');
+            $("#inputResolution").val('');
+            $("#inputInWho").val('');
+            $("#inputTime").val('');
+            $("#inputDesc").val('');
+            $("#editModal").modal('show');        
+        });
+    });
+
+</script>
