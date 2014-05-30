@@ -37,11 +37,8 @@ $(document).ready(function(){
             url: '/device/add',
             data: objData,
             success: function(data, textStatus){
-                if(data.success){
-                    $("#editModal").modal('hide');        
-                }else{
-
-                }
+                $("#editModal").modal('hide');        
+                $('body').html(data);
             }
         });
     };
@@ -53,10 +50,8 @@ $(document).ready(function(){
             url: '/device/edit/' + id,
             data: objData,
             success: function(data, textStatus){
-                if(data.success){
-                    $("#editModal").modal('hide');        
-                }else{
-                }
+                $("#editModal").modal('hide');        
+                $('body').html(data);
             }
         });
     }
@@ -66,6 +61,7 @@ $(document).ready(function(){
             type: "GET",
             url: '/device/del/' + id, 
             success: function(data, textStatus){
+                $('body').html(data);
             }
         });
     }
