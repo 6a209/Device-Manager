@@ -10,7 +10,27 @@ var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var ejs = require('ejs');
+var log4js = require('log4js');
 
+
+// log4js config
+
+log4js.configure({
+    appenders: [
+        {type: 'console'},
+        {
+            type: 'file',
+            filename: 'logs/access.log',
+            maxLogSize: 1024,
+            backups: 3,
+            category: 'normal'
+        }
+    ],
+    replaceConsole: true
+});
+
+var logger = log4js.getLogger('normal');
+logger.setLevel('INFO');
 
 var app = express();
 
@@ -26,6 +46,7 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(app.router);
+app.use(log4js.connectLogger(logger, {level:log4js.levels.INFO, format:':method :url'}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
@@ -48,3 +69,10 @@ app.get('/device/del/:id', device.del);
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+// export logger
+exports.logger=function(name){
+      var logger = log4js.getLogger(name);
+        logger.setLevel('INFO');
+          return logger;
+}
